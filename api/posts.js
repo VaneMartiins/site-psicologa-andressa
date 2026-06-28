@@ -1,7 +1,7 @@
-const { getTokenFromRequest, sendJson } = require("./_auth");
+const { getTokenFromRequest, normalizeEnv, sendJson } = require("./_auth");
 
-const REPO = process.env.GITHUB_REPO || "VaneMartiins/site-psicologa-andressa";
-const BRANCH = process.env.GITHUB_BRANCH || "main";
+const REPO = normalizeEnv(process.env.GITHUB_REPO) || "VaneMartiins/site-psicologa-andressa";
+const BRANCH = normalizeEnv(process.env.GITHUB_BRANCH) || "main";
 const POSTS_PATH = "content/blog/posts.json";
 
 function githubHeaders(token) {

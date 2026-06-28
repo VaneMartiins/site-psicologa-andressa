@@ -3,8 +3,33 @@ const crypto = require("crypto");
 const TOKEN_COOKIE = "andressa_admin_token";
 const STATE_COOKIE = "andressa_oauth_state";
 
+function normalizeEnv(value = "") {
+  return String(value).trim().replace(/^["']|["']$/g, "").trim();
+}
+
+function getRequiredEnv(name) {
+  const value = normalizeEnv(process.env[name]);
+
+  if (!value) {
+    throw new Error(`${name} nao configurado na Vercel.`);
+  }
+
+  return value;
+}
+
+function getRequestOrigin(req) {
+  const proto = String(req.headers["x-forwarded-proto"] || "https").split(",")[0].trim();
+  const host = String(req.headers["x-forwarded-host"] || req.headers.host || "").split(",")[0].trim();
+
+  if (!host) {
+    throw new Error("Host da requisicao nao identificado.");
+  }
+
+  return `${proto}://${host}`;
+}
+
 function getSecret() {
-  const secret = process.env.SESSION_SECRET || process.env.GITHUB_CLIENT_SECRET;
+  const secret = normalizeEnv(process.env.SESSION_SECRET || process.env.GITHUB_CLIENT_SECRET);
 
   if (!secret) {
     throw new Error("SESSION_SECRET ou GITHUB_CLIENT_SECRET nao configurado.");
@@ -91,7 +116,10 @@ module.exports = {
   TOKEN_COOKIE,
   clearCookie,
   encryptToken,
+  getRequestOrigin,
+  getRequiredEnv,
   getTokenFromRequest,
+  normalizeEnv,
   parseCookies,
   sendJson,
   setCookie,

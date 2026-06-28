@@ -3,21 +3,28 @@ const {
   TOKEN_COOKIE,
   clearCookie,
   encryptToken,
+  getRequestOrigin,
+  getRequiredEnv,
   parseCookies,
   sendJson,
   setCookie,
 } = require("./_auth");
 
 module.exports = async function handler(req, res) {
-  const clientId = process.env.GITHUB_CLIENT_ID;
-  const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+  let clientId;
+  let clientSecret;
+  let redirectUri;
   const { code, state } = req.query;
   const cookies = parseCookies(req.headers.cookie);
 
   clearCookie(res, STATE_COOKIE);
 
-  if (!clientId || !clientSecret) {
-    sendJson(res, 500, { message: "GITHUB_CLIENT_ID e GITHUB_CLIENT_SECRET precisam estar configurados." });
+  try {
+    clientId = getRequiredEnv("GITHUB_CLIENT_ID");
+    clientSecret = getRequiredEnv("GITHUB_CLIENT_SECRET");
+    redirectUri = `${getRequestOrigin(req)}/api/callback`;
+  } catch (error) {
+    sendJson(res, 500, { message: error.message });
     return;
   }
 
@@ -26,9 +33,6 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const proto = req.headers["x-forwarded-proto"] || "https";
-  const host = req.headers["x-forwarded-host"] || req.headers.host;
-  const redirectUri = `${proto}://${host}/api/callback`;
   const response = await fetch("https://github.com/login/oauth/access_token", {
     method: "POST",
     headers: {

@@ -30,6 +30,18 @@ No projeto da Vercel, vá em Settings > Environment Variables e configure:
 
 Depois de salvar, faça um novo deploy.
 
+Importante: cole `GITHUB_CLIENT_ID` sem aspas, sem espaços e sem quebras de linha. Use o **Client ID**, não o Client Secret.
+
+Para conferir a leitura das variáveis em produção sem expor segredo, acesse:
+
+`https://SEU-DOMINIO/api/oauth-check`
+
+O retorno deve indicar:
+
+- `hasClientId: true`
+- `clientIdLooksValid: true`
+- `redirectUri` exatamente igual ao callback configurado no GitHub OAuth App
+
 ## Permissão de acesso
 
 A conta GitHub usada no `/admin` precisa ter permissão de escrita no repositório. Sem essa permissão, o painel até abre, mas não conseguirá salvar alterações.
