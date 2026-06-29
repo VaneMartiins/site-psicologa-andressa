@@ -467,6 +467,33 @@ details p {
   margin-top: 28px;
 }
 
+.articles-section {
+  padding: clamp(54px, 8vw, 90px) 0;
+  border-top: 1px solid var(--line);
+}
+
+.articles-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 28px;
+}
+
+.articles-heading h2 {
+  max-width: 760px;
+}
+
+.home-articles {
+  padding-bottom: 0;
+}
+
+.blog-card-placeholder {
+  background:
+    linear-gradient(135deg, rgba(255, 253, 248, 0.86), rgba(143, 164, 139, 0.26)),
+    url("assets/hero-psicoterapia-andressa.png") center / cover;
+}
+
 .empty-state {
   grid-column: 1 / -1;
   color: var(--muted);
@@ -1078,6 +1105,28 @@ textarea {
     padding-bottom: 42px;
   }
 
+  .blog-card-image {
+    height: 176px;
+  }
+
+  .home-articles {
+    padding-bottom: 0;
+  }
+
+  .articles-section {
+    padding: 42px 0;
+  }
+
+  .articles-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .articles-heading .button {
+    width: 100%;
+  }
+
   .blog-card .button {
     width: 100%;
   }
@@ -1152,6 +1201,10 @@ textarea {
   .admin-page h1,
   .article-page h1 {
     font-size: 1.92rem;
+  }
+
+  .blog-card-image {
+    height: 164px;
   }
 
   .hero {

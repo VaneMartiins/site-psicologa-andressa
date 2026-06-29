@@ -79,6 +79,45 @@ function renderBlogList(posts) {
     .join("");
 }
 
+function renderHomeArticles(posts) {
+  const homeArticles = document.querySelector("#home-articles");
+
+  if (!homeArticles) {
+    return;
+  }
+
+  const latestPosts = posts
+    .filter((post) => post.status === "published")
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)))
+    .slice(0, 3);
+
+  if (!latestPosts.length) {
+    homeArticles.innerHTML = '<p class="empty-state">Nenhuma publicação disponível no momento.</p>';
+    return;
+  }
+
+  homeArticles.innerHTML = latestPosts
+    .map((post) => {
+      const image = post.image
+        ? `<img class="blog-card-image" src="${escapeHtml(post.image)}" alt="">`
+        : '<div class="blog-card-image blog-card-placeholder" aria-hidden="true"></div>';
+
+      return `
+        <article class="blog-card">
+          ${image}
+          <div class="post-meta">
+            <span>${escapeHtml(post.category)}</span>
+            <span>${formatDate(post.date)}</span>
+          </div>
+          <h2>${escapeHtml(post.title)}</h2>
+          <p>${escapeHtml(post.summary)}</p>
+          <a class="button secondary" href="/blog/${escapeHtml(post.slug)}">Ler artigo</a>
+        </article>
+      `;
+    })
+    .join("");
+}
+
 function renderBlogPost(posts) {
   const article = document.querySelector("#blog-post");
 
@@ -121,14 +160,20 @@ function renderBlogPost(posts) {
 loadPosts()
   .then((posts) => {
     renderBlogList(posts);
+    renderHomeArticles(posts);
     renderBlogPost(posts);
   })
   .catch(() => {
     const blogList = document.querySelector("#blog-list");
+    const homeArticles = document.querySelector("#home-articles");
     const article = document.querySelector("#blog-post");
 
     if (blogList) {
       blogList.innerHTML = '<p class="empty-state">Não foi possível carregar as publicações.</p>';
+    }
+
+    if (homeArticles) {
+      homeArticles.innerHTML = '<p class="empty-state">Não foi possível carregar os artigos.</p>';
     }
 
     if (article) {
