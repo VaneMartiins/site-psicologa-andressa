@@ -72,7 +72,7 @@ function renderBlogList(posts) {
           </div>
           <h2>${escapeHtml(post.title)}</h2>
           <p>${escapeHtml(post.summary)}</p>
-          <a class="button secondary" href="/blog/${escapeHtml(post.slug)}">Ler artigo</a>
+          <a class="button secondary" href="/blog/post.html?slug=${encodeURIComponent(post.slug)}">Ler artigo</a>
         </article>
       `;
     })
@@ -111,7 +111,7 @@ function renderHomeArticles(posts) {
           </div>
           <h2>${escapeHtml(post.title)}</h2>
           <p>${escapeHtml(post.summary)}</p>
-          <a class="button secondary" href="/blog/${escapeHtml(post.slug)}">Ler artigo</a>
+          <a class="button secondary" href="/blog/post.html?slug=${encodeURIComponent(post.slug)}">Ler artigo</a>
         </article>
       `;
     })
